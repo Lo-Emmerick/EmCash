@@ -240,4 +240,18 @@ class UserTest extends TestCase
 
         $this->assertNotEmpty($user->getName());
     }
+
+    public function testShouldReturnAnUserById(): void
+    {
+        $userdata = (new User(new UserMemory()))->findUserById(3);
+        
+        $this->assertEquals("Ronaldo Nazário", $userdata[1]);
+    }
+
+    public function testShouldDeleteAnUserById(): void
+    {
+        $return = (new User(new UserMemory()))->deleteUserById(2);
+        
+        $this->assertEquals(true, $return);
+    }
 }

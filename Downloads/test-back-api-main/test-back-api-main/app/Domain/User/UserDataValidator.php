@@ -32,11 +32,7 @@ class UserDataValidator implements UserDataValidatorInterface
 
     public function validateCpf(string $cpf): void
     {
-        $trimmedCpf = trim($cpf);
 
-        if (!(new Cpf($trimmedCpf))->isValid()) {
-            throw new DataValidationException('The user cpf is not valid');
-        }
     }
 
     public function validateDateCreation(string $dateCreation): void
