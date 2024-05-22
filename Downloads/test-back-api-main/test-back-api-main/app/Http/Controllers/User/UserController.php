@@ -127,39 +127,6 @@ class UserController extends Controller
             throw $e;
         }
     }
-
-    
-
-    public function getById(Request $request): JsonResponse
-    {
-        try {
-            $userId = $request->route('id');
-
-            $user = new User(new UserMemory());
-
-            $userData = $user->findUserById($userId);
-
-            $admissionDate = Carbon::parse($userData[4]);
-
-            $admissionDateFormatted = $admissionDate->format('d/m/Y');
-
-            $isEligible = $admissionDate->diffInMonths(Carbon::now()) > 6;
-
-            $response[] = [
-                'id' => $userData[0],
-                'name' => $userData[1],
-                'cpf' => $userData[2],
-                'email' => $userData[3],
-                'admission_date' => $admissionDateFormatted,
-                'is_eligible' => $isEligible
-            ];
-
-            return $this->buildSuccessResponse($response);
-        } catch (\Exception $e) {
-            throw $e;
-        }
-    }
-
     
     /**
      * @OA\Get(
@@ -211,7 +178,7 @@ class UserController extends Controller
             $users = $user->findAll();
 
             $response = [];
-            
+
             foreach($users as $user) {
                 $response[] = [
                     'id' => $user[0],
@@ -590,6 +557,56 @@ class UserController extends Controller
             return $this->buildBadRequestResponse($e->getMessage());
         } catch (\Exception $e) {
             throw $e;
+        }
+    }
+
+    public function getById(Request $request): JsonResponse
+    {
+
+        try {
+            $userId = $request->route('id');
+
+            $user = new User(new UserMemory());
+
+            $userData = $user->findUserById($userId);
+
+            $admissionDate = Carbon::parse($userData[4]);
+
+            $admissionDateFormatted = $admissionDate->format('d/m/Y');
+
+            $isEligible = $admissionDate->diffInMonths(Carbon::now()) > 6;
+
+            $response[] = [
+                'id' => $userData[0],
+                'name' => $userData[1],
+                'cpf' => $userData[2],
+                'email' => $userData[3],
+                'admission_date' => $admissionDateFormatted,
+                'is_eligible' => $isEligible
+            ];
+
+            return $this->buildSuccessResponse($response);
+        } catch (\Exception $e) {
+            return $this->buildBadRequestResponse($e->getMessage());
+        }
+    }
+
+    public function deleteById(Request $request): JsonResponse
+    {
+        try {
+            $userId = $request->route('id');
+            
+            $user = new User(new UserMemory());
+
+            $userData = $user->deleteUserById($userId);
+
+            if ($userData) {
+                return $this->buildSuccessResponse(['success' => "User deted success"]);                
+            } else {
+                return $this->buildBadRequestResponse('Error when deleting user');              
+            }
+        } catch (\Exception $e) {
+            return $this->buildBadRequestResponse($e->getMessage());
         }
     }
 }

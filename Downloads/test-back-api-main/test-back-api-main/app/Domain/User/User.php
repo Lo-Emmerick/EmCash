@@ -172,11 +172,6 @@ class User
         return $this->persistence->findAll($this);
     }
 
-    public function findUserById(Int $id): array
-    {
-        return $this->persistence->findUserById($id);
-    }
-
     public function editName(): void
     {
         $this->checkExistentId();
@@ -213,5 +208,15 @@ class User
         $this->setDateEdition(date('Y-m-d H:i:s'));
 
         $this->persistence->editEmail($this);
+    }
+
+    public function findUserById(Int $id): array
+    {
+        return $this->persistence->findUserById($id);
+    }
+
+    public function deleteUserById(Int $id): bool
+    {
+        return $this->persistence->deleteUserById($id);
     }
 }

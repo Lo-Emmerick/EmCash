@@ -30,26 +30,6 @@ class UserMemory implements UserPersistenceInterface
         return $csvData ;
     }
 
-    public function findUserById(Int $id): array
-    {   
-           try {
-        $path = __dir__."/../../../example/UserManagementSpreadsheet.csv";
-        $csvData  = array_map('str_getcsv', file($path));
-    
-        foreach ($csvData as $user) {
-            if($user[0] == $id){
-                return $user;
-            }
-        }
-        die;
-        return null;
-    } catch (\Exception $e) {
-        // Em caso de erro, retorna null ou lança uma exceção, dependendo dos requisitos do sistema
-        return null;
-    }
-    }
-
-
     public function isExistentId(User $user): bool
     {
         return true;
@@ -68,5 +48,46 @@ class UserMemory implements UserPersistenceInterface
     public function editEmail(User $user): void
     {
 
+    }
+
+    public function findUserById(Int $id): array
+    {   
+        $path = __dir__."/../../../example/UserManagementSpreadsheet.csv";
+        $csvData  = array_map('str_getcsv', file($path));
+
+        foreach ($csvData as $user) {
+            if($user[0] == $id){
+                return $user;
+            }
+        }
+
+        return null;
+    }
+
+    public function deleteUserById(Int $id): bool
+    {
+        $removed = false;
+
+        $path = __dir__."/../../../example/UserManagementSpreadsheet.csv";
+        
+        $csvData = array_map('str_getcsv', file($path));
+        
+        foreach ($csvData as $key => $row) {
+            if ($row[0] == $id) {
+                unset($csvData[$key]);
+                $removed = true;
+                break;
+            }
+        }
+
+        $file = fopen($path, 'w');
+        
+        foreach ($csvData as $row) {
+            fputcsv($file, $row);
+        }
+
+        fclose($file);
+
+        return $removed;
     }
 }
