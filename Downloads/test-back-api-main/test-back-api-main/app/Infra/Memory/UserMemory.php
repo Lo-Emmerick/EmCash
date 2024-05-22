@@ -56,12 +56,12 @@ class UserMemory implements UserPersistenceInterface
         $csvData  = array_map('str_getcsv', file($path));
 
         foreach ($csvData as $user) {
-            if($user[0] == $id){
+            if($user[0] == $id && $user[5] == 'active'){
                 return $user;
             }
         }
 
-        return null;
+        return array();
     }
 
     public function deleteUserById(Int $id): bool
@@ -72,17 +72,20 @@ class UserMemory implements UserPersistenceInterface
         
         $csvData = array_map('str_getcsv', file($path));
         
+        $newCsvData = [];
+
         foreach ($csvData as $key => $row) {
             if ($row[0] == $id) {
-                unset($csvData[$key]);
+                $row[5] = 'deleted';
                 $removed = true;
-                break;
             }
+
+            array_push($newCsvData, $row);
         }
 
         $file = fopen($path, 'w');
         
-        foreach ($csvData as $row) {
+        foreach ($newCsvData as $row) {
             fputcsv($file, $row);
         }
 

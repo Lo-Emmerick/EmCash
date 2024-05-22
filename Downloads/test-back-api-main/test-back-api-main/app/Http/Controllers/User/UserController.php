@@ -562,16 +562,15 @@ class UserController extends Controller
 
     public function getById(Request $request): JsonResponse
     {
-
         try {
             $userId = $request->route('id');
 
             $user = new User(new UserMemory());
 
             $userData = $user->findUserById($userId);
-
+        
             $admissionDate = Carbon::parse($userData[4]);
-
+            
             $admissionDateFormatted = $admissionDate->format('d/m/Y');
 
             $isEligible = $admissionDate->diffInMonths(Carbon::now()) > 6;
