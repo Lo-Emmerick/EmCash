@@ -600,7 +600,7 @@ class UserController extends Controller
             $userData = $user->deleteUserById($userId);
 
             if ($userData) {
-                return $this->buildSuccessResponse(['success' => "User deted success"]);                
+                return $this->buildSuccessResponse(['success' => "User deleted with success"]);                
             } else {
                 return $this->buildBadRequestResponse('Error when deleting user');              
             }

@@ -36,6 +36,6 @@ class UserHttpCsvTest extends TestCase
         );
 
         $response->assertStatus(self::HTTP_SUCCESS_STATUS);
-        $response->assertJson(['success' => "User deted success"]);
+        $response->assertJson(['success' => "User deleted with success"]);
     }
 }
