@@ -245,7 +245,12 @@ class UserTest extends TestCase
     {
         $userdata = (new User(new UserMemory()))->findUserById(3);
         
+        $this->assertEquals("3", $userdata[0]);
         $this->assertEquals("Ronaldo Nazário", $userdata[1]);
+        $this->assertEquals("13982313040", $userdata[2]);
+        $this->assertEquals("ronaldo.nazario@email.com", $userdata[3]);
+        $this->assertEquals("2020-07-14", $userdata[4]);
+        $this->assertEquals("active", $userdata[5]);
     }
 
     public function testShouldDeleteAnUserById(): void
